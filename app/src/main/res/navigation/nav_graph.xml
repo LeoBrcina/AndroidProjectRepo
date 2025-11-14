@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/driverStandingsFragment">
+
+    <fragment
+        android:id="@+id/driverStandingsFragment"
+        android:name="hr.algebra.formula1data.fragment.DriverStandingsFragment"
+        android:label="Driver Standings">
+        <action
+            android:id="@+id/action_driverStandingsFragment_to_driverDetailsFragment"
+            app:destination="@id/driverDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/driverDetailsFragment"
+        android:name="hr.algebra.formula1data.fragment.DriverDetailsFragment"
+        android:label="Driver Details">
+        <argument
+            android:name="driverId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/constructorStandingsFragment"
+        android:name="hr.algebra.formula1data.fragment.ConstructorStandingsFragment"
+        android:label="Constructor Standings">
+        <action
+            android:id="@+id/action_constructorStandingsFragment_to_constructorDetailsFragment"
+            app:destination="@id/constructorDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/constructorDetailsFragment"
+        android:name="hr.algebra.formula1data.fragment.ConstructorDetailsFragment"
+        android:label="Constructor Details">
+        <argument
+            android:name="constructorId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/raceCalendarFragment"
+        android:name="hr.algebra.formula1data.fragment.RaceCalendarFragment"
+        android:label="Race Calendar">
+        <action
+            android:id="@+id/action_raceCalendarFragment_to_raceDetailsFragment"
+            app:destination="@id/raceDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/raceDetailsFragment"
+        android:name="hr.algebra.formula1data.fragment.RaceDetailsFragment"
+        android:label="Race Details">
+        <argument
+            android:name="round"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

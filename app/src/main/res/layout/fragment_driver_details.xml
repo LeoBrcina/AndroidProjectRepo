@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewDriverName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Driver Name"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/textViewDriverNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Number: --"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:id="@+id/textViewDriverCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Code: --"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:id="@+id/textViewDriverBirth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date of Birth: --"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:id="@+id/textViewDriverNationality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nationality: --"
+            android:paddingBottom="4dp" />
+
+    </LinearLayout>
+</ScrollView>
