@@ -11,7 +11,7 @@
 **Formula 1 Data** is a full-featured Android application built in **Kotlin**.  
 It provides an intuitive and modern interface for exploring historical Formula 1 seasons, results, driver standings, constructor standings, race schedules, and race details.
 
-The application integrates the **Ergast Developer API** and includes extensive offline capabilities using **Room database caching**, background workers, and scheduled notifications.
+The application integrates the **NOW DEPRECATED Ergast Developer API** and includes extensive offline capabilities using **Room database caching**, background workers, and scheduled notifications.
 
 This project demonstrates mastery of Android development, including:
 
@@ -34,19 +34,19 @@ The repository is structured as a modular, production-grade Android application:
 ### `Formula 1 Data (Android App)`
 - **MVVM Architecture (Model–View–ViewModel)**
 - **Room Database** for caching:
-  - Drivers
-  - Constructors
-  - Driver Standings
-  - Constructor Standings
-  - Race Schedules
-  - Race Results
-- **Repository layer** for unified API + cache access
-- **Retrofit API client** for Ergast endpoints
-- **Coroutines** for asynchronous data loading
-- **Shared ViewModel (YearViewModel)** for season selection propagation
-- **AlarmManager + BroadcastReceiver** for recurring notifications
-- **WorkManager** for background season syncing
-- **Content Provider** for data exposure to external apps
+  - Drivers  
+  - Constructors  
+  - Driver Standings  
+  - Constructor Standings  
+  - Race Schedules  
+  - Race Results  
+- **Repository layer** for unified API + cache access  
+- **Retrofit API client** for Ergast endpoints  
+- **Coroutines** for asynchronous data loading  
+- **Shared ViewModel (YearViewModel)** for season selection propagation  
+- **AlarmManager + BroadcastReceiver** for recurring notifications  
+- **WorkManager** for background season syncing  
+- **Content Provider** for data exposure to external apps  
 
 The entire app runs offline once cached and refreshes only when needed.
 
@@ -58,10 +58,10 @@ The entire app runs offline once cached and refreshes only when needed.
 
 - **Driver Standings** for any selected season  
 - **Constructor Standings** with positions, points, wins  
-- **Race Calendar** with circuit details  
+- **Race Calendar** with circuit and round information  
 - **Race Results** including drivers, teams, grid, and finishing order  
 - **Driver details** (bio, nationality, permanent number, etc.)  
-- **Constructor details** (stats, origin, championships, etc.)
+- **Constructor details** (origin, stats, championships, etc.)  
 
 All features automatically update when switching seasons.
 
@@ -69,24 +69,23 @@ All features automatically update when switching seasons.
 
 ### 🧰 Caching & Offline Capability
 
-- Every dataset (drivers, constructors, standings, races, results) is **cached permanently** using Room
-- Unique **synthetic primary keys** ensure no cross-season data collisions
-- A **cache integrity system** checks data completeness to prevent partial/broken caches
-- Caching reduces Ergast API usage significantly
+- Every dataset (drivers, constructors, standings, races, results) is **cached permanently** using Room  
+- Unique **synthetic primary keys** ensure no cross-season data collisions  
+- A **cache integrity system** checks data completeness to prevent partial/broken caches  
+- Caching dramatically reduces Ergast API usage and speeds up the app  
 
 ---
 
 ### 📅 Year Selection System
 
-A global **year selector** in the toolbar allows changing seasons (1950–2024).  
-It updates:
+A global **year selector** in the toolbar allows changing seasons (1950–2024). It updates:
 
 - Standings  
 - Race Calendar  
 - Race Results  
 - Driver/Constructor details  
 
-All fragments use a shared `YearViewModel`, guaranteeing instant and synchronized updates.
+All fragments use a shared `YearViewModel`, guaranteeing instant and synchronized updates across the app.
 
 ---
 
@@ -94,9 +93,9 @@ All fragments use a shared `YearViewModel`, guaranteeing instant and synchronize
 
 Implemented using:
 
-- **AlarmManager**
-- **BroadcastReceiver**
-- **NotificationManager**
+- **AlarmManager**  
+- **BroadcastReceiver**  
+- **NotificationManager**  
 
 Features:
 
@@ -104,6 +103,7 @@ Features:
 - First trigger after 1 minute  
 - Network availability check  
 - POST_NOTIFICATIONS permission handling  
+- Android 12+ exact alarm permission handling  
 
 ---
 
@@ -113,7 +113,7 @@ A background worker automatically:
 
 1. Iterates through seasons 1950–2024  
 2. Downloads and caches standings & races  
-3. Runs hourly  
+3. Runs on a recurring schedule  
 4. Works even if the app is closed  
 
 This ensures the user always has offline, up-to-date data.
@@ -126,8 +126,8 @@ Implements a custom **F1 Content Provider** for:
 
 - Secure external data access  
 - URI-based queries  
-- Table-by-table exposure  
-- Fully functional for academic evaluation  
+- Table-by-table exposure (standings, races, results, etc.)  
+- Fully functional for academic evaluation and Android coursework requirements  
 
 ---
 
@@ -136,24 +136,31 @@ Implements a custom **F1 Content Provider** for:
 ```bash
 Formula1Data/
 ├── app/
-│   ├── java/hr/algebra/formula1data/
-│   │   ├── api/                # Retrofit Ergast API client
-│   │   ├── database/           # Room DB, DAOs, entities
-│   │   ├── model/              # Kotlin data models
-│   │   ├── repository/         # Repository logic
-│   │   ├── ui/
-│   │   │   ├── activities/
-│   │   │   ├── fragments/      # Standings, races, details
-│   │   │   ├── adapters/       # RecyclerView adapters
-│   │   │   └── viewmodels/
-│   │   ├── worker/             # Background season caching
-│   │   ├── provider/           # ContentProvider implementation
-│   │   ├── notifications/      # Alarm + BroadcastReceiver
-│   │   └── utils/              # Helpers, constants, converters
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/hr/algebra/formula1data/
+│   │   │   │   ├── api/            # Retrofit Ergast API client
+│   │   │   │   ├── database/       # Room DB, DAOs, entities
+│   │   │   │   ├── model/          # Kotlin data models
+│   │   │   │   ├── repository/     # Repository logic (cache + network)
+│   │   │   │   ├── ui/
+│   │   │   │   │   ├── activities/
+│   │   │   │   │   ├── fragments/  # Standings, races, details
+│   │   │   │   │   ├── adapters/   # RecyclerView adapters
+│   │   │   │   │   └── viewmodels/
+│   │   │   │   ├── worker/         # Background season caching
+│   │   │   │   ├── provider/       # ContentProvider implementation
+│   │   │   │   ├── notifications/  # Alarm + BroadcastReceiver
+│   │   │   │   └── utils/          # Helpers, constants, converters
+│   │   │   └── res/                # Layouts, drawables, themes
+│   │   └── test/                   # Unit tests (if any)
 │   │
-│   └── res/                    # Layouts, drawables, themes
+│   ├── AndroidManifest.xml
+│   └── build.gradle.kts
 │
-└── build.gradle.kts            # Kotlin DSL Gradle build
+├── build.gradle.kts                # Project-level Gradle config
+├── settings.gradle.kts
+└── gradle.properties
 ```
 
 ---
@@ -162,7 +169,7 @@ Formula1Data/
 
 The application uses the following:
 
-### 🟦 **Ergast Developer API**  
+### 🟦 Ergast Developer API  
 For all historical Formula 1 data:
 
 - Drivers  
@@ -172,29 +179,53 @@ For all historical Formula 1 data:
 - Race results  
 - Season metadata  
 
-The app requests only essential data thanks to aggressive caching.
+All requests are made over HTTPS and are read-only.
 
 ---
 
 # 🏗 System Architecture
 
-```mermaid
-graph TD
-    A[Ergast API] --> B[Repository (Retrofit)]
-    B --> C[Room Cache]
-    C --> D[ViewModels]
-    D --> E[Fragments/UI]
+The overall flow of data and responsibilities can be summarized as:
 
-    F[AlarmManager] --> G[BroadcastReceiver] --> H[Notifications]
-
-    I[WorkManager] --> J[Season Sync Worker] --> C
-
-    C --> K[Content Provider]
+```text
+[Ergast REST API]
+        │
+        ▼
+[Retrofit API Service]
+        │
+        ▼
+[Repository Layer] ─── checks cache, decides DB vs network
+        │
+        ▼
+[Room Database (Entities + DAOs)]
+        │
+        ▼
+[ViewModels]
+        │
+        ▼
+[Fragments / Activities (UI)]
 ```
+
+Background and system components:
+
+```text
+[AlarmManager] ──▶ [BroadcastReceiver] ──▶ [NotificationManager]
+
+[WorkManager] ──▶ [SeasonSyncWorker] ──▶ [Room Database]
+
+[Room Database] ──▶ [ContentProvider] ──▶ [External Apps (if any)]
+```
+
+This architecture ensures:
+
+- Clear separation of concerns  
+- Offline-first behavior  
+- Lifecycle-aware UI updates  
+- Minimal and controlled API usage  
 
 ---
 
-## 🔌 Key API Endpoints Used
+## 🔌 Key Ergast Endpoints Used
 
 ```http
 GET /{year}/driverStandings.json
@@ -205,6 +236,8 @@ GET /drivers/{driverId}.json
 GET /constructors/{constructorId}.json
 ```
 
+These endpoints are wrapped by Retrofit interfaces and consumed via the repository layer.
+
 ---
 
 ## ⚙️ Android Implementation Details
@@ -212,96 +245,118 @@ GET /constructors/{constructorId}.json
 ### 🏛 MVVM Layer Breakdown
 
 - **ViewModels**
-  - Standings  
-  - Race Calendar  
-  - Driver details  
-  - Constructor details  
-  - Race results  
-  - YearViewModel (global state)
+  - Driver Standings ViewModel  
+  - Constructor Standings ViewModel  
+  - Race Calendar ViewModel  
+  - Race Results ViewModel  
+  - Driver Details ViewModel  
+  - Constructor Details ViewModel  
+  - `YearViewModel` (global season state)
 
 - **Repository**
-  - Fetch-from-API-with-cache fallback
-  - Decides when to return DB vs network
-  - Stores all fetched data into Room
+  - Central access point for all data  
+  - Fetches from Room when data is available and valid  
+  - Falls back to Ergast when cache is missing or incomplete  
+  - Persists new data into Room entities  
 
 - **Room Database**
-  - Entities for every dataset
-  - Composite/synthetic primary keys
-  - DAOs for each domain
-  - Migrations handled automatically
+  - Entities for:
+    - Drivers  
+    - Constructors  
+    - Driver standings  
+    - Constructor standings  
+    - Races  
+    - Race results  
+  - Synthetic primary keys (e.g., `season_driverId`) to avoid conflicts between seasons  
+  - DAOs for all read/write operations  
 
 ---
 
 ### 🔔 Notification System
 
-- **Alarm triggers every hour**
-- Receiver checks network availability
-- Shows dynamic F1-themed notification
-- Uses `NotificationChannel` on Android 8+
+- Uses **AlarmManager** with an exact repeating alarm  
+- BroadcastReceiver:
+  - Checks network connectivity  
+  - Builds and shows an F1-themed notification  
+- Uses **NotificationChannel** for Android 8+  
+- Requests `POST_NOTIFICATIONS` permission on modern Android versions  
 
 ---
 
 ### 🔁 Background Worker
 
-- Syncs each season from 1950–2024
-- Runs indefinitely
-- Handles API rate limitations
-- Writes to Room on completion
+- Implemented using **WorkManager**  
+- Periodically:
+  - Iterates season by season  
+  - Downloads standings and race calendars  
+  - Saves data into Room  
+- Designed to be resilient and not require the app to be in the foreground  
 
 ---
 
 ### 📅 Year Selector Logic
 
-- AlertDialog with year dropdown  
-- Value stored in **SharedPreferences**  
-- Shared `YearViewModel` updates fragments instantly  
-- All fragments observe year changes  
+- The selected year is chosen via an **AlertDialog** (or toolbar selector)  
+- The choice is stored in **SharedPreferences**  
+- `YearViewModel` holds the active season as `LiveData`  
+- All fragments observe `YearViewModel`; when the year changes:
+  - Fragments re-query cached data  
+  - If needed, repository fetches from Ergast and updates Room  
+- Ensures consistent season context across the entire app  
 
 ---
 
 ### 🗂 Content Provider
 
-Enables external querying of:
+- Exposes selected tables through a custom `ContentProvider`  
+- Supports query operations using URIs, e.g.:
 
-- Driver standings  
-- Constructor standings  
-- Race calendar  
-- Race results  
-
-URI example:
-
-```
+```text
 content://hr.algebra.formula1data.provider/driverStandings
+content://hr.algebra.formula1data.provider/constructorStandings
+content://hr.algebra.formula1data.provider/races
+content://hr.algebra.formula1data.provider/results
 ```
+
+- Implemented primarily for educational and project specification purposes  
 
 ---
 
 ## 🧾 .gitignore Highlights
 
 ```gitignore
+# Build and IDE
+/.idea/
 /build/
-.gradle/
-local.properties
+/app/build/
 *.iml
-*.apk
-*.aab
-captures/
-# IDE files
-.idea/
-# Cache
-app/src/main/assets/fastf1_cache/
+
+# Local configuration
+local.properties
+
+# Gradle
+/.gradle/
+
+# Logs
+*.log
+
+# Android profiling & captures
+/captures/
+
+# Misc
+.DS_Store
 ```
 
 ---
 
 ## 🚧 Future Improvements
 
-- Add driver/constructor images  
-- Offline-first UI for cached seasons  
-- Theme toggle (light/dark)  
-- Add circuit layout images  
-- Implement search across seasons  
-- Predictive insights using ML (optional)  
+- Add driver and constructor images and flags  
+- Implement theme toggle (light / dark / AMOLED)  
+- Add circuit layout maps and country flags  
+- Integrate simple predictions or trend indicators per season  
+- Add search and filtering for drivers, teams, and races  
+- Export data via CSV/Share functionality  
 
 ---
 
@@ -309,29 +364,32 @@ app/src/main/assets/fastf1_cache/
 
 This Android application:
 
-- Stores all data locally
-- Uses no authentication
-- Makes only **public API calls**
-- Exposes data via a controlled Content Provider
-- Requires no dangerous permissions except POST_NOTIFICATIONS
+- Uses only **public, read-only** Ergast endpoints  
+- Stores data locally in a private app-specific Room database  
+- Exposes a controlled subset of data via Content Provider for demonstration purposes  
+- Requests only essential permissions:
+  - `POST_NOTIFICATIONS`  
+  - (Network state if used for checks)  
 
-Since the app operates entirely on-device and uses public APIs, no external security risks exist.
+The app never transmits or stores user-sensitive data. All communication is limited to publicly available motorsport information.
+
+In a real production scenario, additional measures such as analytics opt-in, telemetry logging policies, and stricter permission handling could be added, but they are not required for this academic project.
 
 ---
 
 ## 🙏 Acknowledgements
 
-- **Ergast Developer API** for historical F1 data  
-- **Android Jetpack** libraries  
-- **Retrofit**, **Room**, **Coroutines**  
-- Algebra University College — project supervision  
+- **Ergast Developer API** for comprehensive historical Formula 1 data  
+- **Android Jetpack** libraries (ViewModel, LiveData, Room, Navigation, WorkManager)  
+- **Retrofit**, **OkHttp**, and **Kotlin Coroutines**  
+- Algebra University College – teaching staff and mentors  
 
 ---
 
 ## 📜 License
 
-This project is for educational and academic use.  
-A formal license (e.g., MIT) may be added.
+This project is provided for educational and research purposes.  
+A formal license (e.g., MIT) can be added to the repository root if needed.
 
 ---
 
